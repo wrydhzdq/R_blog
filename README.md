@@ -1,6 +1,5 @@
-!\[博客页面1](https://ibb.co/1fptY9D7)
-
-!\[博客页面2](https://ibb.co/Q7vgJ5Hh)
+![博客界面1](https://i.ibb.co/7y7Z8kL/2025-11-12-154921.png)
+![博客界面2](https://i.ibb.co/0Q8L0y2/2025-11-12-154936.png)
 
 
 
