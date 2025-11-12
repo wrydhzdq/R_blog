@@ -1,15 +1,13 @@
-![博客界面1](https://i.ibb.co/7y7Z8kL/2025-11-12-154921.png)
-![博客界面2](https://i.ibb.co/0Q8L0y2/2025-11-12-154936.png)
+# R_Blog - 全栈博客系统
 
+> **一个热爱Java的Young People的分享**  
+> *—— R（我的名字缩写）*
 
+## 📸 项目截图(专属于00后的童年风格,希望你能够喜欢)
 
-\# R\_Blog - 全栈博客系统
+![博客界面1](https://i.ibb.co/0jL1W2C/1.png)
 
-
-
-> \*\*一个热爱Java的Young People的分享\*\*  
-
-> \*—— R（我的名字缩写）\*
+![博客界面2](https://i.ibb.co/6Yy0V3k/2.png)
 
 
 
