@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.r_blog.mapper.BlogMapper">
+
+    <resultMap id="BaseResultMap" type="com.r_blog.entity.Blog">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="summary" property="summary"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="cover_image" property="coverImage"/>
+        <result column="status" property="status"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 根据ID查询博客 -->
+    <select id="selectById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT *
+        FROM blog
+        WHERE id = #{id}
+          AND is_deleted = 0
+    </select>
+
+    <!-- 动态SQL查询博客列表 -->
+    <select id="selectByCondition" parameterType="com.r_blog.dto.request.BlogQueryDTO" resultMap="BaseResultMap">
+        SELECT * FROM blog
+        WHERE is_deleted = 0
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="categoryId != null">
+            AND category_id = #{categoryId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY create_time DESC
+        <!-- PageHelper会自动添加LIMIT，这里不需要写 -->
+    </select>
+
+    <!-- 插入博客 -->
+    <insert id="insert" parameterType="com.r_blog.entity.Blog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog (title, content, summary, category_id, cover_image, status, view_count, is_deleted)
+        VALUES (#{title}, #{content}, #{summary}, #{categoryId}, #{coverImage}, #{status}, #{viewCount}, #{isDeleted})
+    </insert>
+
+    <!-- 查询所有博客 -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from blog
+        where is_deleted = 0
+        order by create_time desc
+    </select>
+
+    <!-- 更新博客 -->
+    <update id="update" parameterType="com.r_blog.entity.Blog">
+        UPDATE blog
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="summary != null and summary != ''">summary = #{summary},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="coverImage != null and coverImage != ''">cover_image = #{coverImage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById" parameterType="Long">
+        UPDATE blog
+        SET is_deleted  = 1,
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新博客状态 -->
+    <update id="updateStatus">
+        UPDATE blog
+        SET status      = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+          AND is_deleted = 0
+    </update>
+
+    <!--   更新阅读量-->
+    <update id="updateViewCount">
+        update blog
+        SET view_count  = view_count + #{viewCount},
+            update_time = NOW()
+        where id = #{id}
+          AND is_deleted = 0
+    </update>
+
+    <update id="updateCover">
+        update blog
+        set cover_image = #{coverUrl}
+        where id = #{id}
+    </update>
+
+    <!-- 根据分类ID查询 -->
+    <select id="selectByCategoryId" parameterType="Long" resultMap="BaseResultMap">
+        SELECT *
+        FROM blog
+        WHERE category_id = #{categoryId}
+          AND is_deleted = 0
+          AND status = 1
+        ORDER BY create_time DESC
+    </select>
+</mapper>

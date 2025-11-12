@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.r_blog.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.r_blog.entity.Comment">
+        <id column="id" property="id"/>
+        <result column="blog_id" property="blogId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="content" property="content"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 添加评论 -->
+    <insert id="insertComment" parameterType="com.r_blog.entity.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment(blog_id, user_id, user_name, content, parent_id, status)
+        values (#{blogId}, #{userId}, #{userName}, #{content}, #{parentId}, 1)
+    </insert>
+
+    <!-- 根据博客ID统计评论数 -->
+    <select id="countCommentById" parameterType="long" resultType="int">
+        select count(*) from comment
+        where blog_id = #{blogId} and status = 1
+    </select>
+
+    <!-- 删除评论（逻辑删除） -->
+    <update id="deleteComment" parameterType="long">
+        update comment set status = 0
+        where id = #{commentId} and status = 1
+    </update>
+
+    <!-- 根据博客ID查询评论列表 -->
+    <select id="selectCommentByBlogId" parameterType="long" resultMap="BaseResultMap">
+        select * from comment
+        where blog_id = #{blogId} and status = 1
+        order by create_time desc
+    </select>
+
+    <!-- 根据ID查询评论 -->
+    <select id="selectCommentById" parameterType="long" resultMap="BaseResultMap">
+        select * from comment
+        where id = #{commentId} and status = 1
+    </select>
+
+</mapper>

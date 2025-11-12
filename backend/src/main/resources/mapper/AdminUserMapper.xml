@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.r_blog.mapper.AdminUserMapper">
+
+    <!-- 结果映射： -->
+    <!--
+    id: 给这个映射规则起个名字（如：BaseResultMap）
+    type: 要映射的Java类（如：com.r_blog.entity.AdminUser）
+
+    column: 数据库表中的字段名（下划线命名）
+    property: Java类中的属性名（驼峰命名）
+    -->
+    <resultMap id="BaseResultMap" type="com.r_blog.entity.AdminUser">
+        <!-- 主键字段映射 -->
+        <id column="id" property="id"/>
+        <!-- 普通字段映射 -->
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 根据用户名查询用户 -->
+    <!--  parameterType="String" 参数类型是string -->
+    <select id="selectByUsername" parameterType="String" resultMap="BaseResultMap">
+        SELECT *
+        FROM admin_user
+        WHERE username = #{username}
+    </select>
+
+    <!-- 用户登录验证 -->
+<!--    这里没用参数类型,是因为mapper那里用了@Param,给参数起别名-->
+    <select id="login" resultMap="BaseResultMap">
+        SELECT *
+        FROM admin_user
+        WHERE username = #{username}
+          AND password = #{password}
+    </select>
+
+    <!-- 根据ID查询用户 -->
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        SELECT *
+        FROM admin_user
+        WHERE id = #{id}
+    </select>
+
+    <!-- 更新用户信息 -->
+    <update id="update" parameterType="com.r_blog.entity.AdminUser">
+        UPDATE admin_user
+        <set>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

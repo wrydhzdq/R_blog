@@ -1,0 +1,53 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/R_Blog?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234  # 改成你的MySQL密码
+
+  spring:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: 5000ms
+          max-idle: 8
+          min-idle: 2
+      # 添加连接配置（解决常见问题）
+      connect-timeout: 3000ms
+
+  #  1.1 开通 OSS 服务
+  #  登录阿里云控制台 → 对象存储 OSS → 开通服务
+  #  1.2 创建 Bucket（存储空间）
+  #  1.3 获取访问密钥
+  # ⚙️ 2. 项目配置
+#  2.1 添加依赖
+#  2.2 配置文件（application.yml）
+#  2.3 设置环境变量
+#  🔧 3. 代码实现
+#  3.1 配置类
+# 阿里云OSS配置
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    access-key-id: ${OSS_ACCESS_KEY_ID:}  # 从环境变量读取，如果为空则用空值
+    access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
+    bucket-name: r-blog-images
+    domain: https://r-blog-images.oss-cn-beijing.aliyuncs.com
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.rblog.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.rblog: debug
